@@ -1,3 +1,3 @@
 # quickmath
 
-A simple math game made with Flutter
+A timed score based math game made with Flutter

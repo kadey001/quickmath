@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 
 import 'home_page.dart';
 
+import '../UI/countdown.dart';
+
 import '../utils/random_colors.dart';
 import '../utils/button.dart';
 import '../utils/eq_generator.dart';
 
-//List<int> inputNum = [];
-
 class PlayPage extends StatefulWidget {
-  
-  
   @override
   State createState() => new PlayPageState();
 }
 
-class PlayPageState extends State<PlayPage> {
-  int gameTimer = 60; //Default timer 60 seconds
+class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
+  AnimationController _controller;
+
+  static const int gameTimerStart = 61; //Default timer 60 seconds
   List equation = generateEq();
   List<int> inputNum = [];
   bool nextQuestion;
@@ -24,20 +24,29 @@ class PlayPageState extends State<PlayPage> {
 
   void initState() {
     super.initState();
+    _controller = new AnimationController(
+      vsync: this,
+      duration: new Duration(seconds: gameTimerStart)
+    );
+    //_controller.forward();
     currentColor = randomColorGen();
     previousColor = currentColor;
     nextQuestion = false;
-    print("currentColor changed and nextQuestion set to false");
   }
 
   void numberInput(int x) {
     if(x == 10) {
+      if(inputNum.isEmpty){
+        return;
+      }
       //Clear Numbers from answer box or remove last????
-      inputNum.removeLast();
-      print(inputNum);
-      this.setState(() {
-        nextQuestion = false;
-      });
+      else{
+        inputNum.removeLast();
+        print(inputNum);
+        this.setState(() {
+          nextQuestion = false;
+        });
+      }
     }
     else if(inputNum.length >= 3) {
       return;
@@ -77,15 +86,17 @@ class PlayPageState extends State<PlayPage> {
         number = number + x;
         return number;
     }
+    return 0;
   }
 
   String problemType(int type) {
     switch (type) {
       case 0: return " * ";
-      case 1: return " + ";
+      case 1: return " / ";
       case 2: return " + ";
       case 3: return " - ";
     }
+    return "ERROR";
   }
 
   void handleAnswer(int userAnswer, int answer) {
@@ -93,7 +104,6 @@ class PlayPageState extends State<PlayPage> {
     equation.clear();
     equation = generateEq();
     inputNum.clear();
-    //nextQuestion = true;
     this.setState(() {
       nextQuestion = true;
       currentColor = randomColorGenCheck(previousColor);
@@ -113,7 +123,7 @@ class PlayPageState extends State<PlayPage> {
               children: <Widget>[
                 new IconButton(
                   alignment: Alignment.centerLeft,
-                  padding: new EdgeInsets.fromLTRB(0.0, 30.0, 160.0, 25.0),
+                  padding: new EdgeInsets.fromLTRB(0.0, 60.0, 160.0, 25.0),
                   icon: new Icon(Icons.arrow_back),
                   color: Colors.white,
                   iconSize: 50.0,
@@ -122,23 +132,30 @@ class PlayPageState extends State<PlayPage> {
                     Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (BuildContext context) => new HomePage()), (Route route) => route == null);
                   }
                 ),
+                //Countdown Timer
                 new Text("Timer: ",
                   style: new TextStyle(
                     color: Colors.white, fontSize: 35.0, fontWeight: FontWeight.bold,
                   ),
                 ),
                 new Container(
-                  padding: EdgeInsets.all(4.0),
-                  decoration: BoxDecoration(
-                    border: new Border.all(color: Colors.white, width: 2.0),
-                    borderRadius: BorderRadius.circular(80.0)
+                  child: new Countdown(
+                    animation: new StepTween(
+                      begin: gameTimerStart,
+                      end: 0,
+                    ).animate(_controller),
                   ),
-                  alignment: Alignment.topRight,
-                  child: new Text(gameTimer.toString(), 
-                    style: new TextStyle(
-                      color: Colors.white, fontSize: 35.0, fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  // padding: EdgeInsets.all(4.0),
+                  // decoration: BoxDecoration(
+                  //   border: new Border.all(color: Colors.white, width: 2.0),
+                  //   borderRadius: BorderRadius.circular(80.0)
+                  // ),
+                  // alignment: Alignment.topRight,
+                  // child: new Text(gameTimerStart.toString(), 
+                  //   style: new TextStyle(
+                  //     color: Colors.white, fontSize: 35.0, fontWeight: FontWeight.bold,
+                  //   ),
+                  // ),
                 ),
               ],
             )
@@ -177,7 +194,7 @@ class PlayPageState extends State<PlayPage> {
                     child: new Padding(
                       padding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                       child: new Center(
-                        child: new Text(inputNum.isEmpty ? "   " : listToInt(inputNum).toString(), style: new TextStyle(color: Colors.white, fontSize: 60.0, fontWeight: FontWeight.bold),)
+                        child: new Text(inputNum.isEmpty ? "  " : listToInt(inputNum).toString(), style: new TextStyle(color: Colors.white, fontSize: 60.0, fontWeight: FontWeight.bold),)
                       )
                     ),
                   ),
@@ -273,4 +290,9 @@ class PlayPageState extends State<PlayPage> {
       ),  
     );
   }
+  @override
+    void dispose() {
+      _controller.dispose();
+      super.dispose();
+    }
 }

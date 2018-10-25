@@ -12,63 +12,54 @@ List generateEq() {
   const int _zMin = 1;
   const int _zMax = 400;
 
-  double returnValue;
   int _x = 0;
   double _y = 0.0;
   int _z = _zMin + (Random().nextInt(_zMax - _zMin));
 
-  double mult(_z, bool firstRun) {
+  void mult(bool firstRun) {
     
     if(firstRun == true){
       _xMax = _z;
       _x = _xMin + (Random().nextInt(_xMax - _xMin));
     }
     if(_z.toDouble() % _x.toDouble() == 0) {
-      returnValue = (_z.toDouble() / _x.toDouble());
-      //return returnValue;
+      _y = (_z.toDouble() / _x.toDouble());
     }
     else {
       --_x;
       firstRun = false;
-      mult(_z, firstRun);
+      mult(firstRun);
     }
-    return returnValue;
   }
 
-  void div(int _z) {
-    //TODO
+  void div() {
+    int z = 1 + Random().nextInt(21);
+    _z = z;
+    _y = 2 + Random().nextInt(11).toDouble();
+    _x = _z * _y.toInt();
   }
 
-  void add(int _z) {
+  void add() {
     _xMax = _z;
     _x = _xMin + (Random().nextInt(_xMax - _xMin));
     _y = (_z.toDouble() - _x.toDouble());
   }
 
-  double sub(int _z) {
+  void sub() {
     _xMin = _z;
     _xMax = 800;
-    _x = _xMin + (Random(1).nextInt(_xMax - _xMin));
-    return (_x.toDouble() - _z.toDouble());
+    _x = _xMin + (Random().nextInt(_xMax - _xMin));
+    _y = (_x.toDouble() - _z.toDouble());
   }  
 
-  int eqType = Random().nextInt(3);
+  int eqType = Random().nextInt(4);
   bool firstRun = true;
 
-  if(eqType == 0) {
-    _y = mult(_z, firstRun);
-  }
-  if(eqType == 1) {
-    add(_z);
-  }
-  if(eqType == 2) {
-    add(_z);
-  }
-  if(eqType == 3) {
-    _y = sub(_z);
-  }
+  eqType == 0 ? mult(firstRun) : eqType == 1 ? div(): eqType == 2 ? add(): sub();
 
   List<int> _equation = [_x, eqType, _y.toInt(), _z];
+
+  print(_equation);
 
   return _equation;
 }
