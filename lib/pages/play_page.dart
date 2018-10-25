@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'home_page.dart';
 
-//import '../UI/answer_button.dart';
-
 import '../utils/random_colors.dart';
 import '../utils/button.dart';
 import '../utils/eq_generator.dart';
@@ -166,7 +164,7 @@ class PlayPageState extends State<PlayPage> {
                     child: new Padding(
                       padding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                       child: new Center(
-                        child: new Text(inputNum.isEmpty ? "" : listToInt(inputNum).toString(), style: new TextStyle(color: Colors.white, fontSize: 60.0, fontWeight: FontWeight.bold),)
+                        child: new Text(inputNum.isEmpty ? "   " : listToInt(inputNum).toString(), style: new TextStyle(color: Colors.white, fontSize: 60.0, fontWeight: FontWeight.bold),)
                       )
                     ),
                   ),
