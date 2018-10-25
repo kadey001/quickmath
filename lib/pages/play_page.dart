@@ -19,17 +19,25 @@ class PlayPageState extends State<PlayPage> {
   int gameTimer = 60; //Default timer 60 seconds
   List equation = generateEq();
   List<int> inputNum = [];
-  bool nextQuestion = true;
+  bool nextQuestion;
+  Color currentColor, previousColor;
 
-  Color currentColor = randomColorGen();
+  void initState() {
+    super.initState();
+    currentColor = randomColorGen();
+    previousColor = currentColor;
+    nextQuestion = false;
+    print("currentColor changed and nextQuestion set to false");
+  }
 
   void numberInput(int x) {
-    nextQuestion = false;
     if(x == 10) {
       //Clear Numbers from answer box or remove last????
       inputNum.removeLast();
       print(inputNum);
-      this.setState(() {});
+      this.setState(() {
+        nextQuestion = false;
+      });
     }
     else if(inputNum.length >= 3) {
       return;
@@ -37,8 +45,9 @@ class PlayPageState extends State<PlayPage> {
     else{
       inputNum.add(x);
       print(inputNum);
-      this.setState(() {});
-      print(currentColor);
+      this.setState(() {
+        nextQuestion = false;
+      });
     }
   }
 
@@ -73,7 +82,7 @@ class PlayPageState extends State<PlayPage> {
   String problemType(int type) {
     switch (type) {
       case 0: return " * ";
-      case 1: return " / ";
+      case 1: return " + ";
       case 2: return " + ";
       case 3: return " - ";
     }
@@ -84,14 +93,18 @@ class PlayPageState extends State<PlayPage> {
     equation.clear();
     equation = generateEq();
     inputNum.clear();
-    nextQuestion = true;
-    this.setState(() {});
+    //nextQuestion = true;
+    this.setState(() {
+      nextQuestion = true;
+      currentColor = randomColorGenCheck(previousColor);
+      previousColor = currentColor;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: nextQuestion == true ? randomColorGen() : currentColor,
+      backgroundColor: currentColor,
       body: new Column(
         children: <Widget>[
           new Container(

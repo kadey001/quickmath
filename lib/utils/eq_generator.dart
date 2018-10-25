@@ -8,8 +8,8 @@ import 'dart:math';
  */
 
 List generateEq() {
-  int _xMax, _xMin = 0;
-  const int _zMin = 0;
+  int _xMax, _xMin = 1;
+  const int _zMin = 1;
   const int _zMax = 400;
 
   double returnValue;
