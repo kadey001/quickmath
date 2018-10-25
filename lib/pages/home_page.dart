@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
               border: new Border.all(color: Colors.white, width: 8.0)
             ),
             padding: new EdgeInsets.all(10.0),
-            child: new Text("Quick Math", style: TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold),),
+            child: new Text("Quick Math", style: TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),),
           ),
           new Text("\n\n\n"),
           new TextButton(

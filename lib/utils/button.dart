@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class TextButton extends StatelessWidget {
+
   final String buttonName;
   final VoidCallback onPressed;
   TextStyle textStyle, buttonTextStyle;
-  //passing props in react style
+
   TextButton(
     this.buttonName,
     this.onPressed,
@@ -14,7 +15,7 @@ class TextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return (new FlatButton(
-      child: new  Text(
+      child: new Text(
         buttonName,
         textAlign: TextAlign.center,
         style: buttonTextStyle
@@ -23,3 +24,19 @@ class TextButton extends StatelessWidget {
     ));
   }
 }
+
+// class PictureButton extends StatelessWidget {
+
+//   final VoidCallback onPressed;
+
+//   PictureButton(this.onPressed);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return new FlatButton(
+//       onPressed: onPressed,
+//       //TODO: Figure out how to make image into button
+//       child: new Text("Test"),
+//     );
+//   }
+// }

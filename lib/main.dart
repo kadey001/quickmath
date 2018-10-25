@@ -3,7 +3,7 @@ import './pages/home_page.dart';
 
 void main() {
   runApp(new MaterialApp(
-    //debugShowCheckedModeBanner: false
+    debugShowCheckedModeBanner: false,
     home: new HomePage()
   ));
 }
