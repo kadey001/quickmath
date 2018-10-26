@@ -5,16 +5,19 @@ class TextButton extends StatelessWidget {
   final String buttonName;
   final VoidCallback onPressed;
   TextStyle textStyle, buttonTextStyle;
+  final EdgeInsets padding;
 
   TextButton(
     this.buttonName,
     this.onPressed,
     this.buttonTextStyle,
+    [this.padding = const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0)]
   );
 
   @override
   Widget build(BuildContext context) {
     return (new FlatButton(
+      padding: padding,
       child: new Text(
         buttonName,
         textAlign: TextAlign.center,

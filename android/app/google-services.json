@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "592653824088",
+    "firebase_url": "https://quick-math-23fc2.firebaseio.com",
+    "project_id": "quick-math-23fc2",
+    "storage_bucket": "quick-math-23fc2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592653824088:android:f6070554322be21a",
+        "android_client_info": {
+          "package_name": "com.flutter.math.quick"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "592653824088-e3hse1ivgn7j8qpe2qejh6uui0b02137.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArSD9aATafMj2EwzHhEWmWKlMCK-CgLHg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

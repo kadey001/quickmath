@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-final List colors = [Colors.blueAccent, 
+final List colors = [
+  Colors.blueAccent, 
   Colors.greenAccent[400], 
   Colors.deepPurpleAccent, 
   Colors.redAccent, 

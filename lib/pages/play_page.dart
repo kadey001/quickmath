@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'home_page.dart';
+import 'end_page.dart';
 
 import '../UI/countdown.dart';
 
 import '../utils/random_colors.dart';
 import '../utils/button.dart';
 import '../utils/eq_generator.dart';
+import '../utils/score.dart';
 
 class PlayPage extends StatefulWidget {
   @override
@@ -16,11 +19,13 @@ class PlayPage extends StatefulWidget {
 class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
   AnimationController _controller;
 
-  static const int gameTimerStart = 61; //Default timer 60 seconds
+  static const int gameTimerStart = 60; //Default timer 60 seconds
+  Score _score = Score(0);
   List equation = generateEq();
   List<int> inputNum = [];
   bool nextQuestion;
   Color currentColor, previousColor;
+
 
   void initState() {
     super.initState();
@@ -28,7 +33,8 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
       vsync: this,
       duration: new Duration(seconds: gameTimerStart)
     );
-    //_controller.forward();
+    _controller.forward();
+    _score.setScore = 0;
     currentColor = randomColorGen();
     previousColor = currentColor;
     nextQuestion = false;
@@ -99,8 +105,15 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
     return "ERROR";
   }
 
+
+
   void handleAnswer(int userAnswer, int answer) {
-    userAnswer == answer ? print("Correct!") : print("Wrong!");
+    if (userAnswer == answer) {
+      //TODO: Add some animation/sound depending on correct/wrong
+      _score.addScore = 100;
+    }
+    else {
+    }
     equation.clear();
     equation = generateEq();
     inputNum.clear();
@@ -113,17 +126,49 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    _controller.addStatusListener((status) {
+      if(status == AnimationStatus.completed) {
+        Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (BuildContext context) => new EndPage(score: _score)), (Route route) => route == null);
+      }
+    });
+    Scaffold(
+      body: StreamBuilder(
+        stream: Firestore.instance.collection('Users').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return const Text('Loading...');
+
+        }
+      ),
+    );
     return new Scaffold(
       backgroundColor: currentColor,
       body: new Column(
         children: <Widget>[
+          new Container(
+            padding: new EdgeInsets.fromLTRB(0.0, 50.0, 10.0, 0.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                new Text("Score: ",
+                  style: new TextStyle(
+                    color: Colors.white, fontSize: 35.0, fontWeight: FontWeight.bold,
+                  ),
+                ),
+                new Text(_score.score.toString(),
+                  style: new TextStyle(
+                    color: Colors.white, fontSize: 35.0, fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
           new Container(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 new IconButton(
                   alignment: Alignment.centerLeft,
-                  padding: new EdgeInsets.fromLTRB(0.0, 60.0, 160.0, 25.0),
+                  padding: new EdgeInsets.fromLTRB(0.0, 0.0, 160.0, 25.0),
                   icon: new Icon(Icons.arrow_back),
                   color: Colors.white,
                   iconSize: 50.0,
@@ -145,24 +190,15 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
                       end: 0,
                     ).animate(_controller),
                   ),
-                  // padding: EdgeInsets.all(4.0),
-                  // decoration: BoxDecoration(
-                  //   border: new Border.all(color: Colors.white, width: 2.0),
-                  //   borderRadius: BorderRadius.circular(80.0)
-                  // ),
-                  // alignment: Alignment.topRight,
-                  // child: new Text(gameTimerStart.toString(), 
-                  //   style: new TextStyle(
-                  //     color: Colors.white, fontSize: 35.0, fontWeight: FontWeight.bold,
-                  //   ),
-                  // ),
                 ),
               ],
             )
+            
           ),
+          
           //Question Box
           new Container(
-            padding: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 40.0),
+            padding: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 15.0),
             alignment: Alignment.center,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -170,7 +206,7 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
                 new Material(
                   color: Color.fromRGBO(0, 0, 0, 0.0),
                   child: new Padding(
-                    padding: new EdgeInsets.symmetric(vertical: 20.0),
+                    padding: new EdgeInsets.symmetric(vertical: 10.0),
                     child: new Center(  
                       child: new Text(equation[0].toString() + problemType(equation[1]) + equation[2].toString() + " = ", style: new TextStyle(color: Colors.white, fontSize: 60.0, fontWeight: FontWeight.bold),)
                     )
@@ -204,21 +240,24 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
           ),
           //Buttons Row 1
           new Container(
-            padding: new EdgeInsets.fromLTRB(0.0, 60.0, 0.0, 10.0),
+            padding: new EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 new TextButton("1", 
                 () => numberInput(1), 
-                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold) 
+                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold),
+                EdgeInsets.fromLTRB(0.0, 0.0, 35.0, 10.0)
                 ),
                 new TextButton("2", 
                 () => numberInput(2), 
-                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold) 
+                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold),
+                EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0)
                 ),
                 new TextButton("3", 
                 () => numberInput(3), 
-                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold) 
+                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold),
+                EdgeInsets.fromLTRB(35.0, 0.0, 0.0, 10.0)
                 ),
               ],
             ),
@@ -231,15 +270,18 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
               children: <Widget>[
                 new TextButton("4", 
                 () => numberInput(4), 
-                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold) 
+                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold),
+                EdgeInsets.fromLTRB(0.0, 0.0, 35.0, 10.0)
                 ),
                 new TextButton("5", 
                 () => numberInput(5), 
-                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold) 
+                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold),
+                EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0) 
                 ),
                 new TextButton("6", 
                 () => numberInput(6), 
-                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold) 
+                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold),
+                EdgeInsets.fromLTRB(35.0, 0.0, 0.0, 10.0) 
                 ),
               ],
             ),
@@ -252,15 +294,18 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
               children: <Widget>[
                 new TextButton("7", 
                 () => numberInput(7), 
-                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold) 
+                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold),
+                EdgeInsets.fromLTRB(0.0, 0.0, 35.0, 10.0)
                 ),
                 new TextButton("8", 
                 () => numberInput(8), 
-                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold) 
+                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold),
+                EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0)
                 ),
                 new TextButton("9", 
                 () => numberInput(9), 
-                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold) 
+                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold),
+                EdgeInsets.fromLTRB(35.0, 0.0, 0.0, 10.0)
                 ),
               ],
             ),
@@ -273,21 +318,23 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
               children: <Widget>[
                 new TextButton("<-", 
                 () => numberInput(10), 
-                TextStyle(color: Colors.white, fontSize: 40.0, fontWeight: FontWeight.bold) 
+                TextStyle(color: Colors.white, fontSize: 40.0, fontWeight: FontWeight.bold),
+                EdgeInsets.fromLTRB(0.0, 0.0, 35.0, 10.0)
                 ),
                 new TextButton("0", 
                 () => numberInput(0), 
-                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold) 
+                TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold)
                 ),
                 new TextButton("->", 
                 () => handleAnswer(listToInt(inputNum), equation[3]),
-                TextStyle(color: Colors.white, fontSize: 40.0, fontWeight: FontWeight.bold) 
+                TextStyle(color: Colors.white, fontSize: 40.0, fontWeight: FontWeight.bold),
+                EdgeInsets.fromLTRB(35.0, 0.0, 0.0, 10.0)
                 ),
               ],
             ),
           ),
         ],
-      ),  
+      ),
     );
   }
   @override

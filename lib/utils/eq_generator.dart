@@ -10,22 +10,20 @@ import 'dart:math';
 List generateEq() {
   int _xMax, _xMin = 1;
   const int _zMin = 1;
-  const int _zMax = 400;
+  const int _zMax = 100;
 
   int _x = 0;
   double _y = 0.0;
   int _z = _zMin + (Random().nextInt(_zMax - _zMin));
 
   void mult(bool firstRun) {
-    
-    if(firstRun == true){
+    if (firstRun == true) {
       _xMax = _z;
       _x = _xMin + (Random().nextInt(_xMax - _xMin));
     }
-    if(_z.toDouble() % _x.toDouble() == 0) {
+    if (_z.toDouble() % _x.toDouble() == 0) {
       _y = (_z.toDouble() / _x.toDouble());
-    }
-    else {
+    } else {
       --_x;
       firstRun = false;
       mult(firstRun);
@@ -47,15 +45,17 @@ List generateEq() {
 
   void sub() {
     _xMin = _z;
-    _xMax = 800;
+    _xMax = 100;
     _x = _xMin + (Random().nextInt(_xMax - _xMin));
     _y = (_x.toDouble() - _z.toDouble());
-  }  
+  }
 
   int eqType = Random().nextInt(4);
   bool firstRun = true;
 
-  eqType == 0 ? mult(firstRun) : eqType == 1 ? div(): eqType == 2 ? add(): sub();
+  eqType == 0
+      ? mult(firstRun)
+      : eqType == 1 ? div() : eqType == 2 ? add() : sub();
 
   List<int> _equation = [_x, eqType, _y.toInt(), _z];
 
