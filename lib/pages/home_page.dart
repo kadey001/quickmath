@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import './highscores_page.dart';
 import './play_page.dart';
@@ -9,10 +10,16 @@ import '../utils/button.dart';
 import '../utils/random_colors.dart';
 
 class HomePage extends StatefulWidget {
-  _HomePageState createState() => _HomePageState();
+  HomePage({this.firestore});
+  final Firestore firestore;
+
+  _HomePageState createState() => _HomePageState(firestore: firestore);
 }
 
 class _HomePageState extends State<HomePage> {
+  _HomePageState({this.firestore});
+  final Firestore firestore;
+
   @override
   Widget build(BuildContext context) {
     return new Material(

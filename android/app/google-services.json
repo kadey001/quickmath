@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:592653824088:android:f6070554322be21a",
+        "mobilesdk_app_id": "1:592653824088:android:4a30b470a2237bfe",
         "android_client_info": {
-          "package_name": "com.flutter.math.quick"
+          "package_name": "com.flutter.quickmath"
         }
       },
       "oauth_client": [

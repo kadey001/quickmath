@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../pages/home_page.dart';
-import '../pages/play_page.dart';
 
 import '../utils/random_colors.dart';
 import '../utils/button.dart';
@@ -18,7 +17,7 @@ class EndPage extends StatefulWidget {
 
 class _EndPageState extends State<EndPage> {
   final Score score;
-  Score _score = Score(0);
+  Score _score;
 
   _EndPageState({Key key, @required this.score});
 

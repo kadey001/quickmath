@@ -1,14 +1,22 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Score {
-  //final String key;
-  int _score;
+  int score = 0;
+  DocumentReference reference;
 
-  Score(this._score);
+  Score.fromMap(Map<String, dynamic> map, {this.reference})
+    : assert(map['score'] != null),
+      score = map['score'];
 
-  int get score => _score;
-  set addScore(int value) => _score += value;
-  set setScore(int value) => _score = value;
+  Score.fromSnapshot(DocumentSnapshot snapshot)
+    : this.fromMap(snapshot.data, reference: snapshot.reference);
 
-  // Score.fromJson(this.key, Map data) {
-  //   _score = data['score'];
-  // }
+  @override
+  String toString() => "Score<$score>";
+
+  Score(this.score);
+
+  int get getScore => score;
+  set addScore(int value) => score += value;
+  set setScore(int value) => score = value;
 }

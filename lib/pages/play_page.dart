@@ -35,6 +35,7 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
     );
     _controller.forward();
     _score.setScore = 0;
+    //Firestore.instance.collection('users').document('test').setData({'score': 0});
     currentColor = randomColorGen();
     previousColor = currentColor;
     nextQuestion = false;
@@ -110,6 +111,13 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
   void handleAnswer(int userAnswer, int answer) {
     if (userAnswer == answer) {
       //TODO: Add some animation/sound depending on correct/wrong
+      //Firestore.instance.collection('users').document('test').setData({'score': 100});
+      // Firestore.instance.runTransaction((transaction) async {
+      //   final freshSnapshot = await transaction.get(_score.reference);
+      //   final fresh = Score.fromSnapshot(freshSnapshot);
+
+      //   await transaction.update(_score.reference, {'score': fresh.score + 100});
+      // });
       _score.addScore = 100;
     }
     else {
@@ -131,15 +139,16 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
         Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (BuildContext context) => new EndPage(score: _score)), (Route route) => route == null);
       }
     });
-    Scaffold(
-      body: StreamBuilder(
-        stream: Firestore.instance.collection('Users').snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return const Text('Loading...');
+    // Scaffold(
+    //   body: StreamBuilder(
+    //     stream: Firestore.instance.collection('users').snapshots(),
+    //     builder: (context, snapshot) {
+    //       if (!snapshot.hasData) return const Text('Loading...');
+    //       _score = Score.fromSnapshot(snapshot.data);
 
-        }
-      ),
-    );
+    //     }
+    //   ),
+    // );
     return new Scaffold(
       backgroundColor: currentColor,
       body: new Column(
@@ -154,7 +163,7 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
                     color: Colors.white, fontSize: 35.0, fontWeight: FontWeight.bold,
                   ),
                 ),
-                new Text(_score.score.toString(),
+                new Text(_score.getScore.toString(),
                   style: new TextStyle(
                     color: Colors.white, fontSize: 35.0, fontWeight: FontWeight.bold,
                   ),

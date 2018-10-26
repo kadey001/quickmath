@@ -1,4 +1,4 @@
-package com.flutter.math.quick;
+package com.flutter.quickmath;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
