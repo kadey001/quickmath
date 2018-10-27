@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 import './pages/home_page.dart';
 
@@ -22,9 +23,13 @@ Future<void> main() async {
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
     .then((_) {
-  runApp(new MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: new HomePage(firestore: firestore)
-  ));
+    runApp(new MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: new HomePage(firestore: firestore)
+    ));
   });
 }
+
+// import './pages/test.dart';
+
+// void main() => runApp(new MaterialApp(home: new Test()));

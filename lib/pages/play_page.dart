@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'dart:async';
 
 import 'home_page.dart';
 import 'end_page.dart';
@@ -17,10 +18,15 @@ class PlayPage extends StatefulWidget {
 }
 
 class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
+  final DatabaseReference database = FirebaseDatabase.instance.reference().child('users').child('test');
+  StreamSubscription<Event> _scoreSubscription;
+  DatabaseError _error;
+  
   AnimationController _controller;
 
   static const int gameTimerStart = 60; //Default timer 60 seconds
-  Score _score = Score(0);
+  Score _score;
+  int score = 0;
   List equation = generateEq();
   List<int> inputNum = [];
   bool nextQuestion;
@@ -34,11 +40,20 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
       duration: new Duration(seconds: gameTimerStart)
     );
     _controller.forward();
-    _score.setScore = 0;
-    //Firestore.instance.collection('users').document('test').setData({'score': 0});
+    _score = new Score(0);
     currentColor = randomColorGen();
     previousColor = currentColor;
     nextQuestion = false;
+    database.set({
+      'score': 0,
+    });
+    database.keepSynced(true);
+    _scoreSubscription = database.onValue.listen((Event event) {
+      setState(() {
+        _error = null;
+        score = event.snapshot.value ?? 0;
+      });
+    });
   }
 
   void numberInput(int x) {
@@ -106,18 +121,23 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
     return "ERROR";
   }
 
-
+  String currentScore() {
+    //TODO: Find a way to obtain and store/return current score from database
+    database.reference().once().then((DataSnapshot snapshot) {
+      print(snapshot.value);
+      //return '${snapshot.value}';
+    });
+  }
 
   void handleAnswer(int userAnswer, int answer) {
     if (userAnswer == answer) {
       //TODO: Add some animation/sound depending on correct/wrong
-      //Firestore.instance.collection('users').document('test').setData({'score': 100});
-      // Firestore.instance.runTransaction((transaction) async {
-      //   final freshSnapshot = await transaction.get(_score.reference);
-      //   final fresh = Score.fromSnapshot(freshSnapshot);
 
-      //   await transaction.update(_score.reference, {'score': fresh.score + 100});
-      // });
+      database.reference().set({
+        'score': score + 100,
+      });
+      score += 100;
+
       _score.addScore = 100;
     }
     else {
@@ -163,7 +183,7 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
                     color: Colors.white, fontSize: 35.0, fontWeight: FontWeight.bold,
                   ),
                 ),
-                new Text(_score.getScore.toString(),
+                new Text(currentScore() ?? "0",//_score.getScore.toString(),
                   style: new TextStyle(
                     color: Colors.white, fontSize: 35.0, fontWeight: FontWeight.bold,
                   ),
@@ -349,6 +369,7 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
   @override
     void dispose() {
       _controller.dispose();
+      _scoreSubscription.cancel();
       super.dispose();
     }
 }
