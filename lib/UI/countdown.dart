@@ -8,7 +8,7 @@ class Countdown extends AnimatedWidget {
   build(BuildContext context) {
     return new Text(
       animation.value.toString(),
-      style: new TextStyle(fontSize: 35.0, color: Colors.white, fontWeight: FontWeight.bold)
+      style: new TextStyle(fontSize: 30.0, color: Colors.white, )//fontWeight: FontWeight.bold)
     );
   }
 }

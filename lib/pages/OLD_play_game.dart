@@ -10,14 +10,17 @@ import '../UI/countdown.dart';
 import '../utils/random_colors.dart';
 import '../utils/button.dart';
 import '../utils/eq_generator.dart';
-import '../utils/score.dart';
+//import '../utils/score.dart';
 
 class PlayPage extends StatefulWidget {
+  final Color color;
+  PlayPage({Key key, @required this.color}) : super(key: key);
   @override
-  State createState() => new PlayPageState();
+  State createState() => new PlayPageState(previousColor: color);
 }
 
 class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
+  PlayPageState({Key key, @required this.previousColor});
   final DatabaseReference database = FirebaseDatabase.instance.reference().child('users').child('test');
   StreamSubscription<Event> _scoreSubscription;
   DatabaseError _error;
@@ -25,9 +28,8 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
   AnimationController _controller;
 
   static const int gameTimerStart = 60; //Default timer 60 seconds
-  Score _score;
-  int score = 0;
-  List equation = generateEq();
+  int score;
+  List equation;
   List<int> inputNum = [];
   bool nextQuestion;
   Color currentColor, previousColor;
@@ -40,10 +42,13 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
       duration: new Duration(seconds: gameTimerStart)
     );
     _controller.forward();
-    _score = new Score(0);
-    currentColor = randomColorGen();
+
+    equation = generateEq('normal');
+    score = 0;
+    currentColor = randomColorGen(previousColor);
     previousColor = currentColor;
     nextQuestion = false;
+
     database.set({
       'score': 0,
     });
@@ -60,8 +65,7 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
     if(x == 10) {
       if(inputNum.isEmpty){
         return;
-      }
-      //Clear Numbers from answer box or remove last????
+      } 
       else{
         inputNum.removeLast();
         print(inputNum);
@@ -121,33 +125,21 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
     return "ERROR";
   }
 
-  String currentScore() {
-    //TODO: Find a way to obtain and store/return current score from database
-    database.reference().once().then((DataSnapshot snapshot) {
-      print(snapshot.value);
-      //return '${snapshot.value}';
-    });
-  }
-
   void handleAnswer(int userAnswer, int answer) {
     if (userAnswer == answer) {
-      //TODO: Add some animation/sound depending on correct/wrong
-
+      //FIXME: Figure out a way to keep score up to date using least ammount of database download cap
       database.reference().set({
         'score': score + 100,
       });
-      score += 100;
 
-      _score.addScore = 100;
-    }
-    else {
+      score += 100;
     }
     equation.clear();
-    equation = generateEq();
+    equation = generateEq('normal');
     inputNum.clear();
     this.setState(() {
       nextQuestion = true;
-      currentColor = randomColorGenCheck(previousColor);
+      currentColor = randomColorGen(previousColor);
       previousColor = currentColor;
     });
   }
@@ -156,19 +148,9 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     _controller.addStatusListener((status) {
       if(status == AnimationStatus.completed) {
-        Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (BuildContext context) => new EndPage(score: _score)), (Route route) => route == null);
+        Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (BuildContext context) => new EndPage(score: score, color: currentColor,)), (Route route) => route == null);
       }
     });
-    // Scaffold(
-    //   body: StreamBuilder(
-    //     stream: Firestore.instance.collection('users').snapshots(),
-    //     builder: (context, snapshot) {
-    //       if (!snapshot.hasData) return const Text('Loading...');
-    //       _score = Score.fromSnapshot(snapshot.data);
-
-    //     }
-    //   ),
-    // );
     return new Scaffold(
       backgroundColor: currentColor,
       body: new Column(
@@ -178,12 +160,7 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                new Text("Score: ",
-                  style: new TextStyle(
-                    color: Colors.white, fontSize: 35.0, fontWeight: FontWeight.bold,
-                  ),
-                ),
-                new Text(currentScore() ?? "0",//_score.getScore.toString(),
+                new Text("Score: $score",
                   style: new TextStyle(
                     color: Colors.white, fontSize: 35.0, fontWeight: FontWeight.bold,
                   ),
@@ -237,7 +214,7 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
                   child: new Padding(
                     padding: new EdgeInsets.symmetric(vertical: 10.0),
                     child: new Center(  
-                      child: new Text(equation[0].toString() + problemType(equation[1]) + equation[2].toString() + " = ", style: new TextStyle(color: Colors.white, fontSize: 60.0, fontWeight: FontWeight.bold),)
+                      child: new Text(equation[0].toString() + equation[1] + equation[2].toString() + " = ", style: new TextStyle(color: Colors.white, fontSize: 60.0, fontWeight: FontWeight.bold),)
                     )
                   ),
                 ),
@@ -345,6 +322,7 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                //FIXME: Replace <- and -> with custom icons
                 new TextButton("<-", 
                 () => numberInput(10), 
                 TextStyle(color: Colors.white, fontSize: 40.0, fontWeight: FontWeight.bold),

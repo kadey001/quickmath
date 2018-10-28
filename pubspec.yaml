@@ -16,6 +16,7 @@ dependencies:
   flutter:
       sdk: flutter
   #New Dependencies
+  auto_size_text: ^0.2.1
   cloud_firestore:
   firebase_database: ^1.0.5
   #firebase_analytics:

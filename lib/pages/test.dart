@@ -11,7 +11,7 @@ class Test extends StatefulWidget {
 }
 
 class TestState extends State<Test> {
-  final DatabaseReference database = FirebaseDatabase.instance.reference().child('users');
+  final DatabaseReference database = FirebaseDatabase.instance.reference().child('users').child('test');
   DatabaseReference _messageRef;
   int score = 0;
 

@@ -7,31 +7,29 @@ import '../utils/button.dart';
 import '../utils/score.dart';
 
 class EndPage extends StatefulWidget {
-  final Score score;
-
-  EndPage({Key key, @required this.score}) : super(key: key);
+  final int score;
+  final color;
+  EndPage({Key key, @required this.score, @required this.color}) : super(key: key);
 
   @override
-  _EndPageState createState() => _EndPageState(score: score);
+  _EndPageState createState() => _EndPageState(score: score, previousColor: color);
 }
 
 class _EndPageState extends State<EndPage> {
-  final Score score;
-  Score _score;
-
-  _EndPageState({Key key, @required this.score});
+  final int score;
+  Color previousColor, currentColor;
+  _EndPageState({Key key, @required this.score, @required this.previousColor});
 
   @override
-    void initState() {
-      _score = score;
-      print(_score);
-      super.initState();
-    }
+  void initState() {
+    super.initState();
+    currentColor = randomColorGen(previousColor);
+  }
 
   @override
   Widget build(BuildContext context) {
     return new Material(
-      color: randomColorGen(),
+      color: currentColor,
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -39,13 +37,13 @@ class _EndPageState extends State<EndPage> {
             decoration: BoxDecoration(
               border: new Border.all(color: Colors.white, width: 6.0)
             ),
-            padding: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+            padding: new EdgeInsets.all(5.0),
             alignment: Alignment.topCenter,
             child: new Text("Results", style: TextStyle(color: Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold,)),
           ),
           new Container(
             padding: new EdgeInsets.symmetric(vertical: 20.0),
-            child: new Text("Final Score: " + _score.score.toString(),
+            child: new Text("Final Score: $score",
               style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold,)
             ),
           ),

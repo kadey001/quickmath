@@ -3,24 +3,21 @@ import 'dart:math';
 
 final List colors = [
   Colors.blueAccent, 
-  Colors.greenAccent[400], 
+  Colors.greenAccent[700], 
   Colors.deepPurpleAccent, 
   Colors.redAccent, 
-  Colors.orangeAccent[400],
-  Colors.blueAccent,
+  Colors.deepOrangeAccent,
   Colors.cyan,
   Colors.pinkAccent
   ];
 
-Color randomColorGen() {
-  return colors[new Random().nextInt(8)];
-}
-
-//Makes sure that background color doesn't repeat
-Color randomColorGenCheck(Color previousColor) {
-  Color newColor = colors[new Random().nextInt(8)];
-  while(newColor == previousColor) { 
-    newColor = colors[new Random().nextInt(8)];
+Color randomColorGen([Color previousColor]) {
+  if(previousColor != null) {
+    Color newColor = colors[new Random().nextInt(7)];
+    while(newColor == previousColor) { 
+      newColor = colors[new Random().nextInt(7)];
+    }
+    return newColor;
   }
-  return newColor;
+  return colors[new Random().nextInt(7)];
 }
