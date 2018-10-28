@@ -23,7 +23,7 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
   MediaQueryData queryData;
   double pixelRatio, textScale;
   int _score, firstNumber, secondNumber, userAnswer;
-  String questionType;
+  String questionType, theme;
   List question;
   List<int> answerList;
   
@@ -39,6 +39,7 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
     );
     _controller.forward();
 
+    theme = 'rainbow';
     currentColor = randomColorGen(previousColor);
     previousColor = currentColor;
     _score = 0;
@@ -68,14 +69,13 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
       }
     });
     return Scaffold(
-      backgroundColor: currentColor,
+      backgroundColor: theme == 'rainbow' ? currentColor : Colors.black,
       body: SafeArea(
         child: Center(
           //aspectRatio: aspectRatio ?? 100/100,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Column(),
               //SCORE & TIME ROW
               Container(
                 color: Colors.black.withOpacity(.25),

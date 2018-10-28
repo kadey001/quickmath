@@ -4,24 +4,39 @@ import './home_page.dart';
 
 import '../utils/random_colors.dart';
 
-class StatsPage extends StatelessWidget {
+import 'package:flutter/material.dart';
+
+class StatsPage extends StatefulWidget {
+  @override
+  _StatsPageState createState() => _StatsPageState();
+}
+
+class _StatsPageState extends State<StatsPage> {
+  Color currentColor;
+
+  void initState() {
+    super.initState();
+    currentColor = randomColorGen();
+  }
+  
   @override
   Widget build(BuildContext context) {
-    return new Material(
-      color: randomColorGen(),
-      child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new IconButton(
-              icon: new Icon(Icons.arrow_back),
-              color: Colors.white,
-              iconSize: 75.0,
-              onPressed: () => Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (BuildContext context) => new HomePage()), (Route route) => route == null),
-            ),
-          ],
-        )
+    return Scaffold(
+      backgroundColor: currentColor,
+      body: InkWell(
+        onTap: () => changeColor(),
+        child: Center(
+          child: Column(
+            children: <Widget>[],
+          ),
+        ),
       ),
     );
+  }
+
+  void changeColor() {
+    setState(() {
+          currentColor = randomColorGen(currentColor);
+        });
   }
 }

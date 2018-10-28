@@ -19,17 +19,19 @@ class _EndPageState extends State<EndPage> {
   final int score;
   Color previousColor, currentColor;
   _EndPageState({Key key, @required this.score, @required this.previousColor});
+  String theme;
 
   @override
   void initState() {
     super.initState();
+    theme = 'rainbow';
     currentColor = randomColorGen(previousColor);
   }
 
   @override
   Widget build(BuildContext context) {
     return new Material(
-      color: currentColor,
+      color: theme == 'rainbow' ? currentColor : Colors.black,
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
