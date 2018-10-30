@@ -23,7 +23,7 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
   PlayPageState({Key key, @required this.previousColor});
   final DatabaseReference database = FirebaseDatabase.instance.reference().child('users').child('test');
   StreamSubscription<Event> _scoreSubscription;
-  DatabaseError _error;
+  //DatabaseError _error;
   
   AnimationController _controller;
 
@@ -55,7 +55,7 @@ class PlayPageState extends State<PlayPage> with TickerProviderStateMixin {
     database.keepSynced(true);
     _scoreSubscription = database.onValue.listen((Event event) {
       setState(() {
-        _error = null;
+        //_error = null;
         score = event.snapshot.value ?? 0;
       });
     });

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
+import 'package:quickmath/main.dart';
 
 import '../pages/end_page.dart';
 
@@ -23,12 +25,12 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
   MediaQueryData queryData;
   double pixelRatio, textScale;
   int _score, firstNumber, secondNumber, userAnswer;
-  String questionType, theme;
+  String questionType;
   List question;
   List<int> answerList;
   
   AnimationController _controller;
-  static const gameTimerStart = 60;
+  static const gameTimerStart = 10;
 
   @override
   void initState() {
@@ -39,7 +41,6 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
     );
     _controller.forward();
 
-    theme = 'rainbow';
     currentColor = randomColorGen(previousColor);
     previousColor = currentColor;
     _score = 0;
@@ -69,7 +70,7 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
       }
     });
     return Scaffold(
-      backgroundColor: theme == 'rainbow' ? currentColor : Colors.black,
+      backgroundColor: theme == 'dark' ? Colors.black : theme == 'darkColorText' ? Colors.black : currentColor,
       body: SafeArea(
         child: Center(
           //aspectRatio: aspectRatio ?? 100/100,
@@ -280,7 +281,17 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
 
   //HELPER FUNCTIONS
   void handleButtonPress(int numberPressed) {
-    if(numberPressed == 10) {
+    if(numberPressed == 0 && answerList.isNotEmpty) {
+      if(answerList[0] == 0) {
+        return;
+      }
+      else {
+        answerList.add(numberPressed);
+        print(answerList);
+        this.setState(() {});
+      }
+    }
+    else if(numberPressed == 10) {
       if(answerList.isEmpty) {
         return;
       }
@@ -289,7 +300,6 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
           answerList.removeLast();
         });
       }
-      
     }
     else if (answerList.length >= 4) {
       return;
@@ -320,39 +330,39 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
     });
   }
 
-  int listToInt(List<int> toStringList) {
+  int listToInt(List<int> toIntList) {
     int number = 0;
-    int listLength = toStringList.length;
+    int listLength = toIntList.length;
 
     switch(listLength) {
       case 1:
-        int x = toStringList[0];
+        int x = toIntList[0];
         number = x;
         return number;
 
       case 2:
-        int x = toStringList[0];
+        int x = toIntList[0];
         number = x * 10;
-        x = toStringList[1];
+        x = toIntList[1];
         number = number + x;
         return number;
     
       case 3:
-        int x = toStringList[0];
+        int x = toIntList[0];
         number = x * 100;
-        x = toStringList[1];
+        x = toIntList[1];
         number = number + (x * 10);
-        x = toStringList[2];
+        x = toIntList[2];
         number = number + x;
         return number;
       case 4:
-        int x = toStringList[0];
+        int x = toIntList[0];
         number = x * 1000;
-        x = toStringList[1];
+        x = toIntList[1];
         number = number + (x * 100);
-        x = toStringList[2];
+        x = toIntList[2];
         number = number + (x * 10);
-        x = toStringList[3];
+        x = toIntList[3];
         number = number + x;
         return number;
     }

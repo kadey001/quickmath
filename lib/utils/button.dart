@@ -4,7 +4,7 @@ class TextButton extends StatelessWidget {
 
   final String buttonName;
   final VoidCallback onPressed;
-  TextStyle textStyle, buttonTextStyle;
+  final TextStyle buttonTextStyle;
   final EdgeInsets padding;
 
   TextButton(

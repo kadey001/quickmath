@@ -3,9 +3,13 @@ import 'package:flutter/services.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
+//import 'package:firebase_database/firebase_database.dart';
 
 import './pages/home_page.dart';
+
+/*TODO: Update settings through database so that it is will
+  stay set when re-launching game */
+String theme = 'darkColorText';//'rainbow' 'dark' are alternatives
 
 Future<void> main() async {
   final FirebaseApp app = await FirebaseApp.configure(

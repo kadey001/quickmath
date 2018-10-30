@@ -65,9 +65,6 @@ List generateEq(String difficulty) {
     addMinZ = 6;
     addMinX = 1;
   }
-  else {
-    
-  }
 
   int _x = 0;
   double _y = 0.0;
