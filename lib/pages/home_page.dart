@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:quickmath/main.dart';
+
+import 'login_page.dart';
 
 import './highscores_page.dart';
 import './mode_select_page.dart';
@@ -11,14 +14,17 @@ import '../utils/button.dart';
 import '../utils/random_colors.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({this.firestore});
+  static final String route = "home-page";
+  final FirebaseUser user;
   final Firestore firestore;
-
-  _HomePageState createState() => _HomePageState(firestore: firestore);
+  HomePage({this.firestore, this.user});
+  
+  _HomePageState createState() => _HomePageState(firestore: firestore, user: user);
 }
 
 class _HomePageState extends State<HomePage> {
-  _HomePageState({this.firestore});
+  _HomePageState({this.firestore, this.user});
+  final FirebaseUser user;
   final Firestore firestore;
   Color currentColor;
   MediaQueryData queryData;
@@ -41,6 +47,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    StreamBuilder(
+      stream: Firestore.instance.collection('users').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) return CircularProgressIndicator();
+        final List<DocumentSnapshot> documents = snapshot.data.documents;
+        String username = documents[0].data['username'].toString();
+        print(username);
+        //return FirestoreListView(documents: snapshot.data.documents);
+      },
+    );
+
     return Scaffold(
       backgroundColor: theme == 'dark' ? Colors.black : theme == 'darkColorText' ? Colors.black : currentColor,
       body: InkWell(

@@ -1,8 +1,3 @@
 # quick_math
 
-A new Flutter project.
-
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+A fun game to test out how quickly you can compute.

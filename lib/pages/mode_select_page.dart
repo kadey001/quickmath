@@ -7,7 +7,7 @@ import '../pages/Play_Game_Page.dart';
 import '../utils/random_colors.dart';
 import '../utils/button.dart';
 
-/*TODO: Add animations for text and Time limit chosing buttons 
+/* TODO: Add animations for text and Time limit chosing buttons 
 that fly in from the right when difficulty is selected */
 
 class ModeSelectPage extends StatefulWidget {

@@ -1,15 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-//import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import './pages/home_page.dart';
+import './pages/login_page.dart';
+import './utils/auth.dart';
 
 /*TODO: Update settings through database so that it is will
   stay set when re-launching game */
-String theme = 'darkColorText';//'rainbow' 'dark' are alternatives
+String theme = 'rainbow'; //'rainbow' 'dark' are alternatives
+Widget _defaultHome = LoginPage();
 
 Future<void> main() async {
   final FirebaseApp app = await FirebaseApp.configure(
@@ -22,16 +27,36 @@ Future<void> main() async {
     ),
   );
 
+  bool loginStatus = await authService.signInStatus();
+  FirebaseUser user = await authService.currentUser();
+  if(loginStatus) {
+    _defaultHome = HomePage(user: user);
+  }
+
   final Firestore firestore = Firestore(app: app);
   await firestore.settings(timestampsInSnapshotsEnabled: true);
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
     .then((_) {
-    runApp(new MaterialApp(
+      runApp(new MyApp());
+    });
+}
+
+class MyApp extends StatelessWidget {
+  final routes = <String, WidgetBuilder> {
+    LoginPage.route: (BuildContext context) => LoginPage(),
+    HomePage.route: (BuildContext context) => HomePage(),
+  };
+
+  @override
+  Widget build(BuildContext context){
+    return MaterialApp(
+      theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
-      home: new HomePage(firestore: firestore)
-    ));
-  });
+      home: _defaultHome, //changes home route based on sign in status
+      routes: routes,
+    );
+  }
 }
 
 // import './pages/test.dart';
