@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:quickmath/utils/auth.dart';
 
 import 'home_page.dart';
@@ -23,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
           color: Colors.deepOrangeAccent,
           child: Text('Guest Login'),
           onPressed: () => authService.anonSignIn().then((FirebaseUser user) {
-            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => HomePage(user: user,)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
           }),
         ),
       ),  
@@ -37,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
           color: Colors.deepOrangeAccent,
           child: Text('Google Login'),
           onPressed: () => authService.googleSignIn().then((FirebaseUser user) {
-            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => HomePage(user: user,)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => HomePage()));
           }),
         ),
       ), 

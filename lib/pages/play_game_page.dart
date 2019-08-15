@@ -278,7 +278,7 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
     );
   }
 
-  //HELPER FUNCTIONS
+  //**HELPER FUNCTIONS**
   void handleButtonPress(int numberPressed) {
     if(numberPressed == 0 && answerList.isNotEmpty) {
       if(answerList[0] == 0) {
@@ -310,11 +310,24 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
     }
   }
 
+  //Determines if answer is correct and awards score accordingly
   void handleAnswer() {
     userAnswer = listToInt(answerList) ?? 0;
     int _answer = question[3];
     if(_answer == userAnswer) {
-      _score += 100;
+      switch(difficulty) {
+        case "easy":
+          _score += 20;
+          break;
+        case "normal":
+          _score += 50;
+          break;
+        case "hard":
+          _score += 100;
+          break;
+        default:
+          //Nothing
+      }
     }
 
     this.setState(() {

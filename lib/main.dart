@@ -1,22 +1,21 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import './pages/home_page.dart';
 import './pages/login_page.dart';
+
 import './utils/auth.dart';
 
-/*TODO: Update settings through database so that it is will
-  stay set when re-launching game */
+//TODO: Update theme using database
 String theme = 'rainbow'; //'rainbow' 'dark' are alternatives
 Widget _defaultHome = LoginPage();
 
 Future<void> main() async {
+  //Configuring App options/settings
   final FirebaseApp app = await FirebaseApp.configure(
     name: 'quickmathA',
     options: const FirebaseOptions(
@@ -27,15 +26,18 @@ Future<void> main() async {
     ),
   );
 
+  //Checking if user is already signed in for automatic redirection to login or home page
   bool loginStatus = await authService.signInStatus();
-  FirebaseUser user = await authService.currentUser();
   if(loginStatus) {
-    _defaultHome = HomePage(user: user);
+    _defaultHome = HomePage();
   }
 
+  //Setting up Firestore
+  //TODO: Is this nessisary? Maybe only check if logged in?
   final Firestore firestore = Firestore(app: app);
   await firestore.settings(timestampsInSnapshotsEnabled: true);
 
+  //Run app in portrait only mode
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
     .then((_) {
       runApp(new MyApp());
@@ -58,7 +60,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// import './pages/test.dart';
-
-// void main() => runApp(new MaterialApp(home: new Test()));

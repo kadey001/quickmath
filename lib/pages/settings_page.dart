@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:quickmath/main.dart';
-import 'package:quickmath/pages/login_page.dart';
 
 import '../utils/random_colors.dart';
 import '../utils/button.dart';
 import '../utils/auth.dart';
+import '../utils/firestore.dart';
 
 class SettingsPage extends StatefulWidget {
   final Color color;
@@ -67,6 +66,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   alignment: Alignment.center,
                   child: TextButton("Rainbow Mode",
                     () => updateTheme('rainbow'),
+                    TextStyle(color: themeTextColor(), fontSize: 30.0, fontWeight: FontWeight.bold, ),
+                    EdgeInsets.all(15.0)
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: TextButton("TEST",
+                    () => firestoreService.newHighScore(200),
                     TextStyle(color: themeTextColor(), fontSize: 30.0, fontWeight: FontWeight.bold, ),
                     EdgeInsets.all(15.0)
                   ),
