@@ -125,12 +125,9 @@ List generateEq(String difficulty) {
       add();
       eqTypeString = "+";
       break;
-    case 4:
+    default:
       sub();
       eqTypeString = "-";
-      break;
-    default:
-      print("Error: eqType is out of bounds");
   }
   //Return the equation in the form of a list
   List _equation = [_x, eqTypeString, _y.toInt(), _z];

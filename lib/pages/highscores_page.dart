@@ -3,6 +3,7 @@ import 'package:quickmath/main.dart';
 
 import '../utils/button.dart';
 import '../utils/random_colors.dart';
+import '../utils/firestore.dart';
 
 class HighScoresPage extends StatefulWidget {
   final Color color;
@@ -23,6 +24,7 @@ class _HighScoresPageState extends State<HighScoresPage> {
   
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: theme == 'dark' ? Colors.black : theme == 'darkColorText' ? Colors.black : currentColor,
       body: InkWell(
@@ -51,6 +53,22 @@ class _HighScoresPageState extends State<HighScoresPage> {
                     TextStyle(color: Colors.white, fontSize: 40.0, fontWeight: FontWeight.bold, ),
                     EdgeInsets.all(25.0)
                   ),
+                ),
+                FutureBuilder(
+                  future: firestoreService.getHighScores(),
+                  builder: (context, snapshot) {
+                    if(snapshot.hasError) {
+                      print(snapshot.error.toString());
+                      return snapshot.error;
+                    } else if(snapshot.connectionState == ConnectionState.done) {
+                      return snapshot.hasData ? new Container(
+                        alignment: Alignment.center,
+                        child: Text(snapshot.data.toString()),
+                      ) : new CircularProgressIndicator();
+                    } else {
+                      return Text("");
+                    }
+                  },
                 ),
               ],
             ),

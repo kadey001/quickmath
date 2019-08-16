@@ -8,38 +8,52 @@ import 'auth.dart';
 
 class FirestoreService {
   final Firestore _db = Firestore.instance;
+  FirebaseUser user;
 
-  //Get current user's high score
-  Future<int> getHighScore() async {
-    int currentHighScore;
-    FirebaseUser user = await authService.currentUser();
+  //Returns a map of easy, normal, and hard highscores
+  Future<Map> getHighScores() async {
+    Map currentHighScores = {"easyHighScore" : 1, "normalHighScore" : 1, "hardHighScore" : 1};
+    user = await authService.currentUser();
     DocumentReference docRef = _db.collection('users').document(user.uid);
-    docRef.get().then((DocumentSnapshot ds) => {
-      currentHighScore = ds["highScore"]
+    await docRef.get().then((DocumentSnapshot ds) => {
+      currentHighScores = ds["highScores"]
     }).catchError((e) => {
       print(e.toString())
     });
-    return currentHighScore;
+
+    return currentHighScores;
   }
 
-  //Adds a new high score to list
-  void newHighScore(int score) async {
-    int currentHighScore = 0;
+  //Adds a new high score based on difficulty and returns coriosponding highscore
+  Future<int> updateHighScores(int score, String difficulty) async {
     FirebaseUser user = await authService.currentUser();
     DocumentReference docRef = _db.collection('users').document(user.uid);
-    docRef.get().then((DocumentSnapshot ds) => {
-      currentHighScore = ds["highScore"]
-    }).catchError((e) => {
-      print(e.toString())
-    });
+    Map currentHighScores = await getHighScores();
 
     //Updates high score in database if the new score is higher
-    if(score > currentHighScore) {
-      await docRef.updateData({ 'highScore' : score });
-    } else {
-      //Nothing as the high score will stay the same
+    switch(difficulty) {
+      case "easy":
+        int easyHighScore = currentHighScores["easyHighScore"];
+        if(score > easyHighScore) {
+          await docRef.updateData({ 'highScores.easyHighScore' : score });
+        }
+        return easyHighScore;
+      case "normal":
+        int normalHighScore = currentHighScores["normalHighScore"];
+        if(score > normalHighScore) {
+          await docRef.updateData({ 'highScores.normalHighScore' : score });
+        }
+        return normalHighScore;
+      case "hard":
+        int hardHighScore = currentHighScores["hardHighScore"];
+        if(score > hardHighScore) {
+          await docRef.updateData({ 'highScores.hardHighScore' : score });
+        }
+        return hardHighScore;
+      default:
+        //1 is impossible score to get so if highScore is 1 then there is an error
+        return 1;
     }
-    return;
   }
 }
 //Initialize the class

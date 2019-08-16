@@ -29,7 +29,7 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
   List<int> answerList;
   
   AnimationController _controller;
-  static const gameTimerStart = 10;
+  static const gameTimerStart = 20;
 
   @override
   void initState() {
@@ -64,7 +64,7 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
       if(status == AnimationStatus.completed) {
         Navigator.of(context).pushAndRemoveUntil(
           new MaterialPageRoute(
-            builder: (BuildContext context) => new EndPage(score: _score, color: currentColor,)), 
+            builder: (BuildContext context) => new EndPage(score: _score, difficulty: difficulty, color: currentColor,)), 
           (Route route) => route == null);
       }
     });
@@ -305,7 +305,6 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
     }
     else {
       answerList.add(numberPressed);
-      print(answerList);
       this.setState(() {});
     }
   }
@@ -351,14 +350,12 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
         int x = toIntList[0];
         number = x;
         return number;
-
       case 2:
         int x = toIntList[0];
         number = x * 10;
         x = toIntList[1];
         number = number + x;
         return number;
-    
       case 3:
         int x = toIntList[0];
         number = x * 100;

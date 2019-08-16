@@ -72,14 +72,6 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 Container(
                   alignment: Alignment.center,
-                  child: TextButton("TEST",
-                    () => firestoreService.newHighScore(200),
-                    TextStyle(color: themeTextColor(), fontSize: 30.0, fontWeight: FontWeight.bold, ),
-                    EdgeInsets.all(15.0)
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
                   child: TextButton("Sign Out",
                     () => authService.signOut(context),
                     TextStyle(color: themeTextColor(), fontSize: 30.0, fontWeight: FontWeight.bold, ),
