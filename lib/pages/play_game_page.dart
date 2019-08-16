@@ -286,7 +286,6 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
       }
       else {
         answerList.add(numberPressed);
-        print(answerList);
         this.setState(() {});
       }
     }

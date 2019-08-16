@@ -132,31 +132,4 @@ List generateEq(String difficulty) {
   //Return the equation in the form of a list
   List _equation = [_x, eqTypeString, _y.toInt(), _z];
   return _equation;
-
-  // if(eqType == 0) {
-  //   try {
-  //     mult(firstRun);
-  //   } catch (e) {
-  //     print(e.toString());
-  //   }
-    
-  //   eqTypeString = "*";
-  // }
-  // else if(eqType == 1) {
-  //   div();
-  //   eqTypeString = "/";
-  // }
-  // else if(eqType == 2) {
-  //   try {
-  //     add();
-  //   } catch (e) {
-  //     print(e.toString());
-  //   }
-  //   add();
-  //   eqTypeString = "+";
-  // }
-  // else {
-  //   sub();
-  //   eqTypeString = "-";
-  // }
 }

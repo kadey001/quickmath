@@ -87,7 +87,8 @@ class AuthService {
       'email': user.email,
       'photoURL': user.photoUrl,
       'displayName': user.displayName,
-      'lastSeen': DateTime.now()
+      'lastSeen': DateTime.now(),
+      'highScores': {'easyHighScore' : 0, 'normalHighScore' : 0, 'hardHighScore' : 0},
     }, merge: true);
   }
 
@@ -97,7 +98,8 @@ class AuthService {
 
     return ref.setData({
       'uid': user.uid,
-      'lastSeen': DateTime.now()
+      'lastSeen': DateTime.now(),
+      'highScores': {'easyHighScore' : 0, 'normalHighScore' : 0, 'hardHighScore' : 0},
     }, merge: true);
   }
 

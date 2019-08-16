@@ -36,6 +36,7 @@ class _EndPageState extends State<EndPage> {
       backgroundColor: theme == 'dark' ? Colors.black : theme == 'darkColorText' ? Colors.black : currentColor,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
             // decoration: BoxDecoration(
@@ -43,7 +44,7 @@ class _EndPageState extends State<EndPage> {
             // ),
             padding: EdgeInsets.all(5.0),
             alignment: Alignment.topCenter,
-            child: Text("Results", style: TextStyle(color: theme == 'rainbow' ? Colors.white : theme == 'darkColorText' ? colors[new Random().nextInt(7)] : Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold,)),
+            child: Text(difficulty[0].toUpperCase() + difficulty.substring(1) + "\nResults", style: TextStyle(color: theme == 'rainbow' ? Colors.white : theme == 'darkColorText' ? colors[new Random().nextInt(7)] : Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold,)),
           ),
           Container(
             child: Row(
@@ -65,9 +66,9 @@ class _EndPageState extends State<EndPage> {
                   print(snapshot.error.toString());
                   return Text(snapshot.error.toString());
                 } else if(snapshot.connectionState == ConnectionState.done){
-                  return snapshot.hasData ? Text("Highscore: " + snapshot.data.toString()) : CircularProgressIndicator();
+                  return snapshot.hasData ? Text("Highscore: " + snapshot.data.toString(), style: TextStyle(color: theme == 'rainbow' ? Colors.white : theme == 'darkColorText' ? colors[new Random().nextInt(7)] : Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold,),) : CircularProgressIndicator();
                 } else {
-                  return Text("Highscore: 0");
+                  return Text("Highscore: ", style: TextStyle(color: theme == 'rainbow' ? Colors.white : theme == 'darkColorText' ? colors[new Random().nextInt(7)] : Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold,),);
                 }
               },
             ),

@@ -36,18 +36,21 @@ class FirestoreService {
         int easyHighScore = currentHighScores["easyHighScore"];
         if(score > easyHighScore) {
           await docRef.updateData({ 'highScores.easyHighScore' : score });
+          return score;
         }
         return easyHighScore;
       case "normal":
         int normalHighScore = currentHighScores["normalHighScore"];
         if(score > normalHighScore) {
           await docRef.updateData({ 'highScores.normalHighScore' : score });
+          return score;
         }
         return normalHighScore;
       case "hard":
         int hardHighScore = currentHighScores["hardHighScore"];
         if(score > hardHighScore) {
           await docRef.updateData({ 'highScores.hardHighScore' : score });
+          return score;
         }
         return hardHighScore;
       default:
