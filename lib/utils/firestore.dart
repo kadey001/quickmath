@@ -20,7 +20,6 @@ class FirestoreService {
     }).catchError((e) => {
       print(e.toString())
     });
-
     return currentHighScores;
   }
 

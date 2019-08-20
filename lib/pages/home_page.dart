@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quickmath/main.dart';
 
 import './highscores_page.dart';
@@ -43,43 +42,43 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: theme == 'dark' ? Colors.black : theme == 'darkColorText' ? Colors.black : currentColor,
       body: InkWell(
         onTap: () => changeColor(),
-        child: new Center(
-          child: new Column(
+        child: Center(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              new Container(
+              Container(
                 decoration: BoxDecoration(
-                  border: new Border.all(color: Colors.white, width: 8.0)
+                  border: Border.all(color: Colors.white, width: 8.0)
                 ),
-                padding: new EdgeInsets.all(20.0),
-                child: new Text("Quick Math", style: TextStyle(color: themeTextColor(), fontSize: 50.0, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),),
+                padding: EdgeInsets.all(20.0),
+                child: Text("Quick Math", style: TextStyle(color: themeTextColor(), fontSize: 50.0, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),),
               ),
-              new Container(
+              Container(
                 padding: EdgeInsets.symmetric(vertical: 20.0),
-                child: new Text('')
+                child: Text('')
               ),
-              new TextButton(
+              TextButton(
                 "Play", 
-                () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ModeSelectPage(color: currentColor))), 
+                () => Navigator.of(context).push( MaterialPageRoute(builder: (BuildContext context) =>  ModeSelectPage(color: currentColor))), 
                 TextStyle(color: Colors.white, fontSize: 40.0, fontWeight: FontWeight.bold),
                 EdgeInsets.all(20.0)
               ),
-              new TextButton(
+              TextButton(
                 "High Scores", 
-                () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new HighScoresPage(color: currentColor,))), 
+                () => Navigator.of(context).push( MaterialPageRoute(builder: (BuildContext context) =>  HighScoresPage(color: currentColor,))), 
                 TextStyle(color: Colors.white, fontSize: 40.0, fontWeight: FontWeight.bold),
                 EdgeInsets.all(20.0)
               ),
-              new TextButton(
+               TextButton(
                 "Stats", 
-                () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new StatsPage(color: currentColor,))), 
+                () => Navigator.of(context).push( MaterialPageRoute(builder: (BuildContext context) =>  StatsPage(color: currentColor,))), 
                 TextStyle(color: Colors.white, fontSize: 40.0, fontWeight: FontWeight.bold),
                 EdgeInsets.all(20.0)
               ),
-              new TextButton(
+               TextButton(
                 "Settings", 
-                () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new SettingsPage(color: currentColor,))), 
+                () => Navigator.of(context).push( MaterialPageRoute(builder: (BuildContext context) =>  SettingsPage(color: currentColor,))), 
                 TextStyle(color: Colors.white, fontSize: 40.0, fontWeight: FontWeight.bold),
                 EdgeInsets.all(20.0)
               ),

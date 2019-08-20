@@ -66,40 +66,40 @@ List generateEq(String difficulty) {
     addMinA = 1;
   }
 
-  int _x = 0;
-  double _y = 0.0;
-  int _z = 0;
+  int _a = 0;
+  double _b = 0.0;
+  int _c = 0;
 
   void mult(bool firstRun) {
     if (firstRun == true) {
-      _z = multMinC + Random().nextInt(multMaxC);
-      _x = multMinA + Random().nextInt(_z);
+      _c = multMinC + Random().nextInt(multMaxC);
+      _a = multMinA + Random().nextInt(_c);
     }
-    if (_z.toDouble() % _x.toDouble() == 0) {
-      _y = (_z.toDouble() / _x.toDouble());
+    if (_c.toDouble() % _a.toDouble() == 0) {
+      _b = (_c.toDouble() / _a.toDouble());
     } else {
-      --_x;
+      --_a;
       firstRun = false;
       mult(firstRun);
     }
   }
 
   void div() {
-    _z = divMinC + Random().nextInt(divMaxC);
-    _y = divMinB + Random().nextInt(divMaxB).toDouble();
-    _x = _z * _y.toInt();
+    _c = divMinC + Random().nextInt(divMaxC);
+    _b = divMinB + Random().nextInt(divMaxB).toDouble();
+    _a = _c * _b.toInt();
   }
 
   void add() {
-    _z = addMinC + Random().nextInt(addMaxC);
-    _x = addMinA + 1 + Random().nextInt(_z - 2);
-    _y = _z.toDouble() - _x.toDouble();
+    _c = addMinC + Random().nextInt(addMaxC);
+    _a = addMinA + 1 + Random().nextInt(_c - 2);
+    _b = _c.toDouble() - _a.toDouble();
   }
 
   void sub() {
-    _z = 1 + Random().nextInt(subMin);
-    _x = subMin + 1 + Random().nextInt(subMaxA);
-    _y = (_x.toDouble() - _z.toDouble());
+    _c = 1 + Random().nextInt(subMin);
+    _a = subMin + 1 + Random().nextInt(subMaxA);
+    _b = (_a.toDouble() - _c.toDouble());
   }
 
   //Checking for equation type
@@ -130,6 +130,6 @@ List generateEq(String difficulty) {
       eqTypeString = "-";
   }
   //Return the equation in the form of a list
-  List _equation = [_x, eqTypeString, _y.toInt(), _z];
+  List _equation = [_a, eqTypeString, _b.toInt(), _c];
   return _equation;
 }

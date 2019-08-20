@@ -16,30 +16,14 @@ class TextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (new FlatButton(
+    return FlatButton(
       padding: padding,
-      child: new Text(
+      child: Text(
         buttonName,
         textAlign: TextAlign.center,
         style: buttonTextStyle
       ),
       onPressed: onPressed,
-    ));
+    );
   }
 }
-
-// class PictureButton extends StatelessWidget {
-
-//   final VoidCallback onPressed;
-
-//   PictureButton(this.onPressed);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return new FlatButton(
-//       onPressed: onPressed,
-//       //TODO: Figure out how to make image into button
-//       child: new Text("Test"),
-//     );
-//   }
-// }

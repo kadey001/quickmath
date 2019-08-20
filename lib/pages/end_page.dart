@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:quickmath/main.dart';
 
@@ -39,12 +38,9 @@ class _EndPageState extends State<EndPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
-            // decoration: BoxDecoration(
-            //   border: new Border.all(color: Colors.white, width: 6.0)
-            // ),
             padding: EdgeInsets.all(5.0),
             alignment: Alignment.topCenter,
-            child: Text(difficulty[0].toUpperCase() + difficulty.substring(1) + "\nResults", style: TextStyle(color: theme == 'rainbow' ? Colors.white : theme == 'darkColorText' ? colors[new Random().nextInt(7)] : Colors.white, fontSize: 50.0, fontWeight: FontWeight.bold,)),
+            child: Text(difficulty[0].toUpperCase() + difficulty.substring(1) + "\nResults", style: TextStyle(color: themeTextColor(), fontSize: 50.0, fontWeight: FontWeight.bold,)),
           ),
           Container(
             child: Row(
@@ -59,34 +55,19 @@ class _EndPageState extends State<EndPage> {
             ),
           ),
           Container(
-            child: FutureBuilder(
-              future: firestoreService.updateHighScores(score, difficulty),
-              builder: (context, snapshot) {
-                if(snapshot.hasError) {
-                  print(snapshot.error.toString());
-                  return Text(snapshot.error.toString());
-                } else if(snapshot.connectionState == ConnectionState.done){
-                  return snapshot.hasData ? Text("Highscore: " + snapshot.data.toString(), style: TextStyle(color: theme == 'rainbow' ? Colors.white : theme == 'darkColorText' ? colors[new Random().nextInt(7)] : Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold,),) : CircularProgressIndicator();
-                } else {
-                  return Text("Highscore: ", style: TextStyle(color: theme == 'rainbow' ? Colors.white : theme == 'darkColorText' ? colors[new Random().nextInt(7)] : Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold,),);
-                }
-              },
-            ),
+            child: _highScore()
           ),
           Container(
             padding: EdgeInsets.symmetric(vertical: 20.0),
             child: Text("Final Score: $score",
-              style: TextStyle(color: theme == 'rainbow' ? Colors.white : theme == 'darkColorText' ? colors[new Random().nextInt(7)] : Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold,)
+              style: TextStyle(color: themeTextColor(), fontSize: 30.0, fontWeight: FontWeight.bold,)
             ),
           ),
           Container(
-            // decoration: BoxDecoration(
-            //   border: new Border.all(color: Colors.white, width: 2.0),
-            // ),
             child: TextButton(
               "Home", 
               () => Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (BuildContext context) => new HomePage()), (Route route) => route == null), 
-              TextStyle(color: theme == 'rainbow' ? Colors.white : theme == 'darkColorText' ? colors[new Random().nextInt(7)] : Colors.white, fontSize: 35.0, fontWeight: FontWeight.bold),
+              TextStyle(color: themeTextColor(), fontSize: 35.0, fontWeight: FontWeight.bold),
               EdgeInsets.all(5.0)
             ),
           ),
@@ -94,4 +75,23 @@ class _EndPageState extends State<EndPage> {
       ),
     );
   }
+
+  Widget _highScore() {
+    return FutureBuilder(
+      future: firestoreService.updateHighScores(score, difficulty),
+      builder: (context, snapshot) {
+        if(snapshot.hasError) {
+          print(snapshot.error.toString());
+          return Text(snapshot.error.toString());
+        } else if(snapshot.connectionState == ConnectionState.done){
+          return snapshot.hasData ? Text("Highscore: " + snapshot.data.toString(), 
+            style: TextStyle(color: themeTextColor(), fontSize: 30.0, fontWeight: FontWeight.bold,),) : null;
+        } else {
+          return Text("Highscore: ", 
+            style: TextStyle(color: themeTextColor(), fontSize: 30.0, fontWeight: FontWeight.bold,),);
+        }
+      },
+    );
+  }
 }
+

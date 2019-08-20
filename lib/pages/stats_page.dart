@@ -17,6 +17,8 @@ class _StatsPageState extends State<StatsPage> {
   Color currentColor;
   _StatsPageState({Key key, @required this.previousColor});
 
+  
+
   void initState() {
     super.initState();
     currentColor = randomColorGen(previousColor);
@@ -24,6 +26,8 @@ class _StatsPageState extends State<StatsPage> {
   
   @override
   Widget build(BuildContext context) {
+    final double deviceWidth = MediaQuery.of(context).size.shortestSide;
+    final double deviceHeight = MediaQuery.of(context).size.longestSide;
     return Scaffold(
       backgroundColor: theme == 'dark' ? Colors.black : theme == 'darkColorText' ? Colors.black : currentColor,
       body: InkWell(
@@ -44,14 +48,6 @@ class _StatsPageState extends State<StatsPage> {
                         ),
                       ],
                     ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  child: TextButton("TEST",
-                    () => changeColor(),
-                    TextStyle(color: Colors.white, fontSize: 40.0, fontWeight: FontWeight.bold, ),
-                    EdgeInsets.all(25.0)
-                  ),
                 ),
               ],
             ),

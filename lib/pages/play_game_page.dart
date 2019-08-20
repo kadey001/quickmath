@@ -29,7 +29,10 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
   List<int> answerList;
   
   AnimationController _controller;
-  static const gameTimerStart = 20;
+  static const gameTimerStart = 60;
+
+  //TODO: Add a countdown timer before game starts
+  //TODO: Remove score for wrong answer (changes depending on difficulty)
 
   @override
   void initState() {
@@ -68,6 +71,14 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
           (Route route) => route == null);
       }
     });
+    //Device size variables
+    final double deviceWidth = MediaQuery.of(context).size.shortestSide;
+    final double deviceHeight = MediaQuery.of(context).size.longestSide;
+    final bool smallDevice = (deviceHeight < 600.0);
+    final double buttonHeight = deviceHeight * .025;
+    final double buttonWidth = deviceHeight * .025;
+    final double textFontSize = smallDevice ? 40 : 50;
+    final TextStyle buttonTextStyle = smallDevice ? TextStyle(color: Colors.white, fontSize: 40.0,) : TextStyle(color: Colors.white, fontSize: 50.0,);
     return Scaffold(
       backgroundColor: theme == 'dark' ? Colors.black : theme == 'darkColorText' ? Colors.black : currentColor,
       body: SafeArea(
@@ -82,12 +93,12 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text("Score: $_score", style: TextStyle(color: Colors.white, fontSize: 30.0,)),
+                    Text("Score: $_score", style: TextStyle(color: themeTextColor(), fontSize: smallDevice ? 20.0 : 30.0,)),
                     Container(
                       child: Row(
                         children: <Widget>[
-                          Text("Time: ", style: TextStyle(color: Colors.white, fontSize: 30.0,)),
-                          Countdown(
+                          Text("Time: ", style: TextStyle(color: themeTextColor(), fontSize: smallDevice ? 20.0 : 30.0,)),
+                          Countdown(//TODO: Make timer smaller on smaller devices
                             animation: new StepTween(
                               begin: gameTimerStart,
                               end: 0,
@@ -102,14 +113,14 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
               //PROBLEM ROW
               Container(
                 //TODO: Find a way to scale this based on screen length/size
-                padding: EdgeInsets.symmetric(vertical: 30.0),
+                //padding: EdgeInsets.symmetric(vertical: deviceHeight/100),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 30.0),
+                      padding: EdgeInsets.symmetric(vertical: deviceHeight * .05),
                       child: Text("$firstNumber $questionType $secondNumber =",
-                        style: TextStyle(color: Colors.white, fontSize: 55.0, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
+                        style: TextStyle(color: Colors.white, fontSize: textFontSize, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
                       ),
                     ),
                   ],
@@ -121,10 +132,10 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.only(bottom: 30.0),
+                      padding: EdgeInsets.only(bottom: smallDevice ? 15.0 : 30.0),
                       child: Container(
-                        width: 200.0,
-                        height: 90.0,
+                        width: 250,
+                        height: deviceHeight * .12,
                         padding: EdgeInsets.all(5.0),
                         decoration: BoxDecoration(
                           border: new Border.all(color: Colors.white.withOpacity(0.9), width: 4.0),
@@ -132,7 +143,7 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
                         ),
                         alignment: Alignment.center,
                         child: Text(answerList.isEmpty ? "" : listToInt(answerList).toString(),
-                          style: TextStyle(color: Colors.white, fontSize: 65.0, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: Colors.white, fontSize: textFontSize + 5, fontWeight: FontWeight.bold),
                         ),
                       )
                     ),
@@ -146,8 +157,8 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
                       child: Container(
                         child: TextButton("1", 
                           () => handleButtonPress(1),
-                          TextStyle(color: Colors.white, fontSize: 50.0,),
-                          EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0)
+                          buttonTextStyle,
+                          EdgeInsets.symmetric(vertical: buttonHeight, horizontal: buttonWidth)
                         ),
                       ),
                     ),
@@ -155,8 +166,8 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
                       child: Container(
                         child: TextButton("2", 
                           () => handleButtonPress(2),
-                          TextStyle(color: Colors.white, fontSize: 50.0),
-                          EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0)
+                          buttonTextStyle,
+                          EdgeInsets.symmetric(vertical: buttonHeight, horizontal: buttonWidth)
                         ),
                       ),
                     ),
@@ -164,8 +175,8 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
                       child: Container(
                         child: TextButton("3", 
                           () => handleButtonPress(3),
-                          TextStyle(color: Colors.white, fontSize: 50.0),
-                          EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0)
+                          buttonTextStyle,
+                          EdgeInsets.symmetric(vertical: buttonHeight, horizontal: buttonWidth)
                         ),
                       ),
                     ),
@@ -179,8 +190,8 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
                       child: Container(
                         child: TextButton("4", 
                           () => handleButtonPress(4),
-                          TextStyle(color: Colors.white, fontSize: 50.0),
-                          EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0)
+                          buttonTextStyle,
+                          EdgeInsets.symmetric(vertical: buttonHeight, horizontal: buttonWidth)
                         ),
                       ),
                     ),
@@ -188,8 +199,8 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
                       child: Container(
                         child: TextButton("5", 
                           () => handleButtonPress(5),
-                          TextStyle(color: Colors.white, fontSize: 50.0),
-                          EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0)
+                          buttonTextStyle,
+                          EdgeInsets.symmetric(vertical: buttonHeight, horizontal: buttonWidth)
                         ),
                       ),
                     ),
@@ -197,8 +208,8 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
                       child: Container(
                         child: TextButton("6", 
                           () => handleButtonPress(6),
-                          TextStyle(color: Colors.white, fontSize: 50.0),
-                          EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0)
+                          buttonTextStyle,
+                          EdgeInsets.symmetric(vertical: buttonHeight, horizontal: buttonWidth)
                         ),
                       ),
                     ),
@@ -212,8 +223,8 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
                       child: Container(
                         child: TextButton("7", 
                           () => handleButtonPress(7),
-                          TextStyle(color: Colors.white, fontSize: 50.0),
-                          EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0)
+                          buttonTextStyle,
+                          EdgeInsets.symmetric(vertical: buttonHeight, horizontal: buttonWidth)
                         ),
                       ),
                     ),
@@ -221,8 +232,8 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
                       child: Container(
                         child: TextButton("8", 
                           () => handleButtonPress(8),
-                          TextStyle(color: Colors.white, fontSize: 50.0),
-                          EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0)
+                          buttonTextStyle,
+                          EdgeInsets.symmetric(vertical: buttonHeight, horizontal: buttonWidth)
                         ),
                       ),
                     ),
@@ -230,8 +241,8 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
                       child: Container(
                         child: TextButton("9", 
                           () => handleButtonPress(9),
-                          TextStyle(color: Colors.white, fontSize: 50.0),
-                          EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0)
+                          buttonTextStyle,
+                          EdgeInsets.symmetric(vertical: buttonHeight, horizontal: buttonWidth)
                         ),
                       ),
                     ),
@@ -245,7 +256,7 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
                       child: Container(
                         child: IconButton(
                           icon: Icon(Icons.arrow_back, color: Colors.white,),
-                          iconSize: 50.0,
+                          iconSize: smallDevice ? 45.0 : 50.0,
                           onPressed: () => handleButtonPress(10),
                         ),
                       ),
@@ -254,8 +265,8 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
                       child: Container(
                         child: TextButton("0", 
                           () => handleButtonPress(0),
-                          TextStyle(color: Colors.white, fontSize: 50.0),
-                          EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0)
+                          buttonTextStyle,
+                          EdgeInsets.symmetric(vertical: buttonHeight, horizontal: buttonWidth)
                         ),
                       ),
                     ),
@@ -263,7 +274,7 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
                       child: Container(
                         child: IconButton(
                           icon: Icon(Icons.arrow_forward, color: Colors.white,),
-                          iconSize: 50.0,
+                          iconSize: smallDevice ? 45.0 : 50.0,
                           onPressed: () => handleAnswer(),
                         ),
                       ),
