@@ -9,7 +9,7 @@ import 'dart:math';
 
 List generateEq(String difficulty) {
   String eqTypeString;
-  int multMaxC, multMinA, multMinC, addMinA, addMinC, addMaxC, subMaxA, subMin, divMinC, divMaxC, divMinB, divMaxB;
+  int multMaxC, multMinA, multMinC, addMinA, addMinC, addMaxC, subMaxA, subMinA, subMinC, subMin, divMinC, divMaxC, divMinB, divMaxB;
   final int eqType = Random().nextInt(4);
   bool firstRun = true;
   
@@ -19,16 +19,18 @@ List generateEq(String difficulty) {
     multMinC = 1;
     multMinA = 1;
 
-    subMaxA = 13;
-    subMin = 10;
+    subMaxA = 80;
+    subMinA = 1;
+    subMinC = 1;
+    subMin = 20;
 
     divMaxC = 10;
     divMinC = 1; 
     divMaxB = 10;
     divMinB = 2;
     
-    addMaxC = 30;
-    addMinC = 6;
+    addMaxC = 100;
+    addMinC = 10;
     addMinA = 1;
   }
   else if(difficulty == 'normal') {
@@ -36,34 +38,38 @@ List generateEq(String difficulty) {
     multMinC = 1;
     multMinA = 1;
 
-    subMaxA = 13;
-    subMin = 10;
+    subMaxA = 900;
+    subMinA = 10;
+    subMinC = 10;
+    subMin = 100;
 
     divMaxC = 10;
     divMinC = 1; 
     divMaxB = 10;
     divMinB = 2;
     
-    addMaxC = 30;
-    addMinC = 6;
-    addMinA = 1;
+    addMaxC = 1000;
+    addMinC = 100;
+    addMinA = 10;
   } 
   else if(difficulty == 'hard') {
     multMaxC = 30;
     multMinC = 1;
     multMinA = 1;
 
-    subMaxA = 13;
-    subMin = 10;
+    subMaxA = 9000;
+    subMinA = 100;
+    subMinC = 100;
+    subMin = 1000;
 
     divMaxC = 10;
     divMinC = 1; 
     divMaxB = 10;
     divMinB = 2;
     
-    addMaxC = 30;
-    addMinC = 6;
-    addMinA = 1;
+    addMaxC = 10000;
+    addMinC = 1000;
+    addMinA = 100;
   }
 
   int _a = 0;
@@ -97,8 +103,8 @@ List generateEq(String difficulty) {
   }
 
   void sub() {
-    _c = 1 + Random().nextInt(subMin);
-    _a = subMin + 1 + Random().nextInt(subMaxA);
+    _c = subMinC + Random().nextInt(subMin);
+    _a = subMin + subMinA + Random().nextInt(subMaxA);
     _b = (_a.toDouble() - _c.toDouble());
   }
 
@@ -113,7 +119,11 @@ List generateEq(String difficulty) {
       eqTypeString = "*";
       break;
     case 1:
-      div();
+      try {
+        div();
+      } catch(e) {
+        print(e.toString());
+      }
       eqTypeString = "/";
       break;
     case 2:
@@ -122,11 +132,14 @@ List generateEq(String difficulty) {
       } catch(e) {
         print(e.toString());
       }
-      add();
       eqTypeString = "+";
       break;
     default:
-      sub();
+      try {
+        sub();
+      } catch(e) {
+        print(e.toString());
+      }
       eqTypeString = "-";
   }
   //Return the equation in the form of a list

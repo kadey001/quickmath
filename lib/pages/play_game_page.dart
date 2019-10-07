@@ -25,11 +25,10 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
   double pixelRatio, textScale;
   int _score, firstNumber, secondNumber, userAnswer;
   String questionType;
-  List question;
+  List _question;
   List<int> answerList;
-  
   AnimationController _controller;
-  static const gameTimerStart = 60;
+  static const gameTimer = 60;
 
   //TODO: Add a countdown timer before game starts
   //TODO: Remove score for wrong answer (changes depending on difficulty)
@@ -39,17 +38,17 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
     super.initState();
     _controller = new AnimationController(
       vsync: this,
-      duration: new Duration(seconds: gameTimerStart)
+      duration: new Duration(seconds: gameTimer)
     );
     _controller.forward();
 
     currentColor = randomColorGen(previousColor);
     previousColor = currentColor;
     _score = 0;
-    question = generateEq(difficulty);
-    firstNumber = question[0];
-    questionType = question[1];
-    secondNumber = question[2];
+    _question = generateEq(difficulty);
+    firstNumber = _question[0];
+    questionType = _question[1];
+    secondNumber = _question[2];
     answerList = [];
   }
 
@@ -79,6 +78,7 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
     final double buttonWidth = deviceHeight * .025;
     final double textFontSize = smallDevice ? 40 : 50;
     final TextStyle buttonTextStyle = smallDevice ? TextStyle(color: Colors.white, fontSize: 40.0,) : TextStyle(color: Colors.white, fontSize: 50.0,);
+    
     return Scaffold(
       backgroundColor: theme == 'dark' ? Colors.black : theme == 'darkColorText' ? Colors.black : currentColor,
       body: SafeArea(
@@ -100,7 +100,7 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
                           Text("Time: ", style: TextStyle(color: themeTextColor(), fontSize: smallDevice ? 20.0 : 30.0,)),
                           Countdown(//TODO: Make timer smaller on smaller devices
                             animation: new StepTween(
-                              begin: gameTimerStart,
+                              begin: gameTimer,
                               end: 0,
                             ).animate(_controller),
                           ),
@@ -322,7 +322,7 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
   //Determines if answer is correct and awards score accordingly
   void handleAnswer() {
     userAnswer = listToInt(answerList) ?? 0;
-    int _answer = question[3];
+    int _answer = _question[3];
     if(_answer == userAnswer) {
       switch(difficulty) {
         case "easy":
@@ -337,15 +337,29 @@ class PlayGamePageState extends State<PlayGamePage> with TickerProviderStateMixi
         default:
           //Nothing
       }
+    } else {
+      switch(difficulty) {
+        case "easy":
+          _score -= 10;
+          break;
+        case "normal":
+          _score -= 25;
+          break;
+        case "hard":
+          _score -= 50;
+          break;
+        default:
+          //Nothing
+      }
     }
 
     this.setState(() {
-      question.clear();
+      _question.clear();
       answerList.clear();
-      question = generateEq(difficulty);
-      firstNumber = question[0];
-      questionType = question[1];
-      secondNumber = question[2];
+      _question = generateEq(difficulty);
+      firstNumber = _question[0];
+      questionType = _question[1];
+      secondNumber = _question[2];
       currentColor = randomColorGen(previousColor);
       previousColor = currentColor;
     });

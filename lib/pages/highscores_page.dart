@@ -63,7 +63,7 @@ class _HighScoresPageState extends State<HighScoresPage> {
                     } else if(snapshot.connectionState == ConnectionState.done) {
                       return snapshot.hasData ? new Container(
                         alignment: Alignment.center,
-                        child: Text(snapshot.data.toString()),
+                        child: Text(snapshot.data.easyHighScore),
                       ) : new CircularProgressIndicator();
                     } else {
                       return Text("");
