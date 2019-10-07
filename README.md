@@ -1,3 +1,3 @@
-# quick_math
+# Quick Math
 
-A fun game to test out how quickly you can compute.
+A computation game made with Flutter and Firebase.
